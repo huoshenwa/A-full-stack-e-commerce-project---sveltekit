@@ -1,0 +1,19 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"editor.fontSize": 18,
+	"window.zoomLevel": -1,
+	"workbench.statusBar.visible": false,
+	"editor.hover.enabled": "on",
+	"gitlens.currentline.enabled": false,
+	"terminal.integrated.fontSize": 18,
+	"terminal.integrated.fontWeight": "500",
+	"terminal.integrated.fontWeightBold": "600",
+	"editor.formatOnSave": true,
+	"gitlens.codeLens.enabled": false,
+	"workbench.activityBar.location": "default",
+	"workbench.editor.labelFormat": "short",
+	"workbench.tree.indent": 18,
+	"explorer.compactFolders": false
+}

@@ -1,0 +1,29 @@
+@reference "../../../routes/layout.css";
+
+#highlights {
+    @apply w-screen h-full overflow-hidden common-padding bg-zinc
+}
+
+.highlights-header {
+    @apply  screen-max-width
+}
+
+.highlights-header-box {
+    @apply mb-12 w-full md:flex items-end justify-between
+}
+
+.highlights-header-box #title {
+    @apply  section-heading
+}
+
+.highlights-header-box .div_link {
+    @apply  flex flex-wrap items-end gap-5
+}
+
+.highlights-header-box .div_link .link {
+    @apply link
+}
+
+.link img {
+    @apply ml-2
+}

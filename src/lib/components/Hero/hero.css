@@ -1,0 +1,35 @@
+@reference "../../../routes/layout.css";
+
+.sechero {
+    @apply  w-full nav-height relative
+}
+
+.sechero-main {
+    @apply flex-center flex-col h-5/6 bg-black
+}
+
+.sechero-main-title {
+    @apply hero-title
+}
+
+.sechero-main-divvideo {
+    @apply  w-9/12 md:w-10/12
+}
+
+.sechero-main-divvideo video {
+    /* 让元素完全忽略所有鼠标 / 触摸交互 */
+    @apply pointer-events-none
+}
+
+.sechero-footer {
+    @apply flex flex-col items-center translate-y-20 
+    opacity-0
+}
+
+.sechero-footer a {
+    @apply btn
+}
+
+.sechero-footer p {
+    @apply font-normal text-xl text-white
+}

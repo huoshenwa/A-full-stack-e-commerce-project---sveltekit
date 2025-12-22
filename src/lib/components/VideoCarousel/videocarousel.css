@@ -1,0 +1,49 @@
+@reference "../../../routes/layout.css";
+
+#carouselHeader {
+    @apply  flex items-center md:relative md:left-[12%]
+}
+
+.slider {
+    @apply pr-10 sm:pr-20
+}
+
+.slider-box {
+    @apply video-carousel_container
+}
+
+.slider-box .video-box {
+    @apply w-full h-full flex-center rounded-3xl overflow-hidden
+}
+
+.video-box .video {
+    @apply pointer-events-none 
+}
+
+.slider-box .video-text-box {
+    @apply absolute top-12 left-[5%] z-10
+}
+
+.video-text-box p {
+    @apply md:text-2xl text-xl font-medium
+}
+
+#carouselFooter {
+    @apply relative flex-center mt-10
+}
+
+#points-box {
+    @apply flex-center py-5 px-7 bg-gray-300 rounded-full backdrop-blur
+}
+
+#points-box .point-outside {
+    @apply mx-2 w-3 h-3 bg-gray-200 rounded-full relative cursor-pointer
+}
+
+#points-box .point-outside .point-inside {
+    @apply absolute h-full w-full rounded-full
+}
+
+#carouselFooter #control-btn {
+    @apply control-btn
+}
