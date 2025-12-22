@@ -23,7 +23,7 @@ canvas {
 
 @theme {
 	--color-zinc: #101010;
-	--color-blue: #2997FF;
+	--color-blue: #2997ff;
 	--color-gray: #86868b;
 	--color-gray-100: #94928d;
 	--color-gray-200: #afafaf;
@@ -37,7 +37,7 @@ canvas {
 	margin-inline-end: auto;
 	position: relative;
 	max-width: 1120px;
-    width: 100%;
+	width: 100%;
 }
 
 @utility flex-center {
@@ -46,7 +46,7 @@ canvas {
 
 /* 关键修复：使用唯一的、大间距的 padding 定义 */
 @utility common-padding {
-	@apply sm:py-32 py-20 sm:px-10 px-5;
+	@apply px-5 py-20 sm:px-10 sm:py-32;
 }
 
 @utility nav-height {
@@ -56,73 +56,72 @@ canvas {
 /* --- 标题与文本 (已整合，无重复) --- */
 
 @utility section-heading {
-	@apply text-gray lg:text-6xl md:text-5xl text-3xl font-medium opacity-0 translate-y-20 text-left;
+	@apply translate-y-20 text-left text-3xl font-medium text-gray opacity-0 md:text-5xl lg:text-6xl;
 }
 
 @utility hero-title {
-	@apply text-center font-semibold text-3xl text-gray-100 opacity-0 max-md:mb-10;
+	@apply text-center text-3xl font-semibold text-gray-100 opacity-0 max-md:mb-10;
 }
 
 @utility hiw-title {
-	@apply text-4xl md:text-7xl font-semibold text-center leading-tight;
+	@apply text-center text-4xl leading-tight font-semibold md:text-7xl;
 }
 
 @utility hiw-subtitle {
-	@apply text-gray font-semibold text-xl md:text-2xl py-5 text-center;
+	@apply py-5 text-center text-xl font-semibold text-gray md:text-2xl;
 }
 
 @utility hiw-text {
-	@apply text-gray text-xl font-normal md:font-semibold leading-relaxed;
+	@apply text-xl leading-relaxed font-normal text-gray md:font-semibold;
 }
 
 @utility hiw-bigtext {
-	@apply text-white text-3xl md:text-5xl font-normal md:font-semibold my-2;
+	@apply my-2 text-3xl font-normal text-white md:text-5xl md:font-semibold;
 }
 
 @utility feature-text {
-	@apply text-gray max-w-md text-lg md:text-xl font-semibold opacity-0 translate-y-[100px] leading-relaxed;
+	@apply max-w-md translate-y-[100px] text-lg leading-relaxed font-semibold text-gray opacity-0 md:text-xl;
 }
-
 
 /* --- 组件特定样式 --- */
 
 @utility feature-video {
-	@apply w-full h-full object-cover object-center scale-150 opacity-0;
+	@apply h-full w-full scale-150 object-cover object-center opacity-0;
 }
 
 @utility hiw-video {
-	@apply absolute w-[95%] h-[90%] rounded-[56px] overflow-hidden;
+	@apply absolute h-[90%] w-[95%] overflow-hidden rounded-[56px];
 }
 
 @utility btn {
-	@apply px-5 py-2 rounded-3xl bg-blue my-5 hover:bg-transparent border border-transparent hover:border hover:text-blue hover:border-blue;
+	@apply my-5 rounded-3xl border border-transparent bg-blue px-5 py-2 hover:border hover:border-blue hover:bg-transparent hover:text-blue;
 }
 
 @utility link {
-	@apply text-blue hover:underline cursor-pointer flex items-center text-xl opacity-0 translate-y-20;
+	@apply flex translate-y-20 cursor-pointer items-center text-xl text-blue opacity-0 hover:underline;
 }
 
 @utility control-btn {
-	@apply ml-4 p-4 rounded-full bg-gray-300 backdrop-blur flex-center;
+	@apply ml-4 flex-center rounded-full bg-gray-300 p-4 backdrop-blur;
 }
 
 @utility color-container {
-	@apply flex items-center justify-center px-4 py-4 rounded-full bg-gray-300 backdrop-blur;
+	@apply flex items-center justify-center rounded-full bg-gray-300 px-4 py-4 backdrop-blur;
 }
 
 @utility size-btn-container {
-	@apply flex items-center justify-center p-1 rounded-full bg-gray-300 backdrop-blur ml-3 gap-1;
+	@apply ml-3 flex items-center justify-center gap-1 rounded-full bg-gray-300 p-1 backdrop-blur;
 }
 
 @utility size-btn {
-	@apply w-10 h-10 text-sm flex justify-center items-center bg-white text-black rounded-full transition-all;
+	@apply flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm text-black transition-all;
 }
 
 @utility video-carousel_container {
-	@apply relative sm:w-[70vw] w-[88vw] md:h-[70vh] sm:h-[50vh] h-[35vh];
+	@apply relative h-[35vh] w-[88vw] sm:h-[50vh] sm:w-[70vw] md:h-[70vh];
 }
 
 /* --- 动画 --- */
 @utility g_fadeIn {
-	@apply opacity-0 translate-y-[100px];
+	@apply translate-y-[100px] opacity-0;
 }
