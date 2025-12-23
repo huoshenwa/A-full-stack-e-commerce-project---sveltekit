@@ -10,13 +10,13 @@ export const GET: RequestHandler = async ({ url }) => {
     try {
         const filter = {
             categoryId: url.searchParams.get('categoryId') || undefined,
-            status: url.searchParams.get('status') as any,
+            status: url.searchParams.get('status') as any || undefined,
             isPublished: url.searchParams.get('published') === 'true' ? true : undefined,
             minPrice: url.searchParams.get('minPrice') ? Number(url.searchParams.get('minPrice')) : undefined,
             maxPrice: url.searchParams.get('maxPrice') ? Number(url.searchParams.get('maxPrice')) : undefined,
-            inStock: url.searchParams.get('inStock') === 'true',
+            inStock: url.searchParams.get('inStock') == 'true',
             search: url.searchParams.get('search') || undefined,
-            sortBy: url.searchParams.get('sortBy') as any,
+            sortBy: url.searchParams.get('sortBy') as any || undefined,
             page: url.searchParams.get('page') ? Number(url.searchParams.get('page')) : 1,
             pageSize: url.searchParams.get('pageSize') ? Number(url.searchParams.get('pageSize')) : 20
         };

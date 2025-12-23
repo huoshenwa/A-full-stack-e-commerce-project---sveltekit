@@ -8,7 +8,7 @@
 </script>
 
 <nav>
-	<a href="/">首页</a>
+	<a href="/index">首页</a>
 	<a href="/products">商品</a>
 
 	{#if user}

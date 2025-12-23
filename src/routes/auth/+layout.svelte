@@ -6,15 +6,15 @@
 	let { children } = $props();
 	let mainContainer = $state<HTMLElement>();
 
-	onMount(() => {
-		// 苹果式的优雅淡入：略微上移并平滑显现
-		gsap.from(mainContainer, {
-			y: 10,
-			opacity: 0,
-			duration: 1.2,
-			ease: 'power2.out'
-		});
-	});
+	// onMount(() => {
+	// 	// 苹果式的优雅淡入：略微上移并平滑显现
+	// 	gsap.from(mainContainer, {
+	// 		y: 10,
+	// 		opacity: 0,
+	// 		duration: 1.2,
+	// 		ease: 'power2.out'
+	// 	});
+	// });
 </script>
 
 <div
