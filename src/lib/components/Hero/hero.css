@@ -1,35 +1,34 @@
 @reference "../../../routes/layout.css";
 
 .sechero {
-    @apply  w-full nav-height relative
+	@apply relative nav-height w-full;
 }
 
 .sechero-main {
-    @apply flex-center flex-col h-5/6 bg-black
+	@apply flex-center h-5/6 flex-col bg-black;
 }
 
 .sechero-main-title {
-    @apply hero-title
+	@apply hero-title;
 }
 
 .sechero-main-divvideo {
-    @apply  w-9/12 md:w-10/12
+	@apply w-9/12 md:w-10/12;
 }
 
 .sechero-main-divvideo video {
-    /* 让元素完全忽略所有鼠标 / 触摸交互 */
-    @apply pointer-events-none
+	/* 让元素完全忽略所有鼠标 / 触摸交互 */
+	@apply pointer-events-none;
 }
 
 .sechero-footer {
-    @apply flex flex-col items-center translate-y-20 
-    opacity-0
+	@apply flex translate-y-20 flex-col items-center opacity-0;
 }
 
 .sechero-footer a {
-    @apply btn
+	@apply btn;
 }
 
 .sechero-footer p {
-    @apply font-normal text-xl text-white
+	@apply text-xl font-normal text-white;
 }

@@ -1,0 +1,127 @@
+/* 引入公共布局样式 */
+@reference "../../../routes/layout.css";
+
+/* 核心区块：黑色背景、全屏宽度、垂直布局、居中、底部间距、通用内边距 */
+.a17-pro-section {
+	@apply mb-500 flex w-full flex-col items-center bg-black common-padding;
+}
+
+/* 顶部空白占位：响应式高度 */
+.a17-pro-section__top-spacer {
+	@apply h-20 w-full md:h-32 lg:h-40;
+}
+
+/* 内容容器：限制最大屏幕宽度 */
+.a17-pro-section__content-wrapper {
+	@apply screen-max-width;
+}
+
+/* 核心内容区：垂直布局、居中、响应式垂直间距 */
+.a17-pro-section__content {
+	@apply flex flex-col items-center gap-y-20 md:gap-y-24;
+}
+
+/* 芯片图标容器：居中、全屏宽度、响应式上边距 */
+.a17-pro-section__chip-container {
+	@apply mt-20 flex-center w-full md:mt-32;
+}
+
+/* 芯片图标：白色投影效果 */
+.a17-pro-section__chip-img {
+	@apply drop-shadow-[0_0_50px_rgba(255,255,255,0.2)];
+}
+
+/* 标题区域：垂直布局、居中、全屏宽度 */
+.a17-pro-section__title-area {
+	@apply flex w-full flex-col items-center;
+}
+
+/* 主标题：响应式字号、居中、半粗体（复用hiw-title样式） */
+.a17-pro-section__main-title {
+	@apply hiw-title text-center text-4xl font-semibold md:text-6xl;
+}
+
+/* 副标题：内边距、响应式字号、上边距（复用hiw-subtitle样式） */
+.a17-pro-section__subtitle {
+	@apply mt-4 px-5 hiw-subtitle text-lg md:text-xl;
+}
+
+/* 游戏画面展示区：全屏宽度、垂直布局、居中、响应式最大宽度（电影感留白） */
+.a17-pro-section__game-display {
+	@apply flex w-full max-w-[90vw] flex-col items-center md:max-w-3xl;
+}
+
+/* 媒体容器：相对定位、全屏高度/宽度、居中 */
+.a17-pro-section__media-container {
+	@apply relative flex-center h-full w-full;
+}
+
+/* 帧图片容器：溢出隐藏、居中、全屏宽度、相对定位、层级10 */
+.a17-pro-section__frame-container {
+	@apply relative z-10 flex-center w-full overflow-hidden;
+}
+
+/* 帧图片：透明背景、相对定位、层级10、自适应宽高 */
+.a17-pro-section__frame-img {
+	@apply relative z-10 h-auto w-full bg-transparent;
+}
+
+/* 视频容器：居中（复用hiw-video样式） */
+.a17-pro-section__video-container {
+	@apply hiw-video flex-center;
+}
+
+/* 游戏演示视频：忽略鼠标交互、对象覆盖、全屏宽高、响应式圆角 */
+.a17-pro-section__game-video {
+	@apply pointer-events-none h-full w-full rounded-[30px] object-cover md:rounded-[42px];
+}
+
+/* 游戏名称：浅灰色、半粗体、居中、上边距、响应式字号、紧凑字符间距 */
+.a17-pro-section__game-name {
+	@apply mt-4 text-center text-base font-semibold tracking-tight text-gray-400 md:text-lg;
+}
+
+/* 底部详情区：全屏宽度、响应式布局、两端对齐、居中（移动端）/顶部对齐（桌面端）、间距、底部内边距 */
+.a17-pro-section__bottom-details {
+	@apply flex w-full flex-col items-center justify-between gap-12 px-5 pb-10 md:flex-row md:items-start md:gap-16;
+}
+
+/* 详情文本区：弹性1、垂直布局、居中（移动端）/左对齐（桌面端）、居中（移动端）/左对齐（桌面端）、垂直间距 */
+.a17-pro-section__details-text {
+	@apply flex flex-1 flex-col items-center justify-center gap-y-6 text-center md:items-start md:text-left;
+}
+
+/* 详情段落：淡入动画、响应式字号（复用hiw-text/g_fadeIn样式） */
+.a17-pro-section__details-paragraph {
+	@apply g_fadeIn hiw-text text-lg md:text-xl;
+}
+
+/* 高亮文本：白色强调 */
+.a17-pro-section__highlight-text {
+	@apply text-white;
+}
+
+/* GPU 特性区：弹性1、垂直布局、居中、居中对齐、响应式上边距（桌面端）、淡入动画 */
+.a17-pro-section__gpu-feature {
+	@apply flex flex-1 g_fadeIn flex-col items-center justify-center text-center md:pt-2;
+}
+
+/* GPU 标签：字号、底部间距（复用hiw-text样式） */
+.a17-pro-section__gpu-label {
+	@apply mb-2 hiw-text text-lg;
+}
+
+/* GPU 标题：大号字体、底部间距（复用hiw-text样式）、响应式字号 */
+.a17-pro-section__gpu-title {
+	@apply hiw-bigtext mb-2 text-4xl md:text-5xl;
+}
+
+/* GPU 描述：字号（复用hiw-text样式） */
+.a17-pro-section__gpu-desc {
+	@apply hiw-text text-lg;
+}
+
+/* 底部空白占位：响应式高度 */
+.a17-pro-section__bottom-spacer {
+	@apply h-20 w-full md:h-32 lg:h-40;
+}

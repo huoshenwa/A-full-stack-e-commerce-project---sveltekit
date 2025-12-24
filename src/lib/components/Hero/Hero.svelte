@@ -1,12 +1,12 @@
 <script lang="ts">
-	import {showBuy,showTitle} from './motion'
-	import './hero.css'
+	import { showBuy, showTitle } from './motion';
+	import './hero.css';
 	import { onMount } from 'svelte';
 	import heroSrc from '../../assets/videos/hero.mp4';
 	import smallHeroSrc from '../../assets/videos/smallHero.mp4';
 	import { browser } from '$app/environment';
 	// 判断当前是否 >= md
-	let isMdUp = $state(false);
+	let isMdUp: boolean | null = $state(null);
 	//根据屏幕大小的断点派生videoSrc
 	let videoSrc = $derived(isMdUp ? heroSrc : smallHeroSrc);
 	$effect(() => {
@@ -29,20 +29,16 @@
 		};
 	});
 	onMount(() => {
-		showTitle("#heroTitle")
-		showBuy('#showBuy')
+		showTitle('#heroTitle');
+		showBuy('#showBuy');
 	});
 </script>
+
 <section class="sechero">
 	<div class="sechero-main">
-		<p  id="heroTitle" class="sechero-main-title">iPhone 15 Pro</p>
+		<p id="heroTitle" class="sechero-main-title">iPhone 15 Pro</p>
 		<div class="sechero-main-divvideo">
-			<video src={videoSrc}
-			autoplay
-			muted
-			playsinline
-			preload="auto"
-			></video>
+			<video src={videoSrc} autoplay muted playsinline preload="auto"></video>
 		</div>
 	</div>
 	<div id="showBuy" class="sechero-footer">

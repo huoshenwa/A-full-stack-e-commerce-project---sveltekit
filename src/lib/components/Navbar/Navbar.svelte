@@ -6,7 +6,7 @@
 	import { navLists } from '../../constants/index';
 	import { goto } from '$app/navigation';
 	const goToProduct = () => {
-		goto('/products');
+		goto('/index');
 	};
 </script>
 

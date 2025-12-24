@@ -5,7 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ locals }) => {
     // 已登录则重定向
     if (locals.user) {
-        throw redirect(302, '/');
+        throw redirect(302, '/index');
     }
 
     return {};
@@ -34,6 +34,6 @@ export const actions: Actions = {
         }
 
         // 登录成功，重定向到首页
-        throw redirect(302, '/');
+        throw redirect(302, '/index');
     }
 };
