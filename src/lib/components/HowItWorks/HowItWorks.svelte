@@ -1,4 +1,5 @@
 <script lang="ts">
+	import './howItWorks.css';
 	import { chipImg, frameImg, frameVideo } from '../../utils';
 	import { animateWithGsap } from '../../utils/animations';
 	import gsap from 'gsap';
@@ -9,11 +10,11 @@
 		gsap.from('#chip', {
 			scrollTrigger: {
 				trigger: '#chip',
-				start: '20% bottom'
+				start: '20% 80%'
 			},
 			opacity: 0,
 			scale: 2,
-			duration: 2,
+			duration: 3,
 			ease: 'power2.inOut'
 		});
 
@@ -26,45 +27,31 @@
 	});
 </script>
 
-<section class="common-padding bg-black w-full flex flex-col items-center mb-500">
-	<div class="w-full h-20 md:h-32 lg:h-40"></div>
-	<div class="screen-max-width">
-		<div class="flex flex-col items-center gap-y-20 md:gap-y-24">
-			<div id="chip" class="flex-center w-full mt-20 md:mt-32">
-				<img
-					src={chipImg}
-					alt="chip"
-					width="180"
-					height="180"
-					class="drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-				/>
+<section class="a1Section">
+	<div class="a1Section__content-wrapper">
+		<div class="a1Section__content">
+			<div id="chip" class="a1Section__chip-container">
+				<img src={chipImg} alt="chip" width="180" height="180" class="a1Section__chip-img" />
 			</div>
 
-			<!-- 标题区域 -->
-			<div class="flex flex-col items-center w-full">
-				<!-- text-4xl/6xl: 稍微调小标题字体 -->
-				<h2 class="hiw-title text-4xl md:text-6xl text-center font-semibold">
+			<div class="a1Section__title-area">
+				<h2 class="a1Section__main-title">
 					A17 Pro chip.
 					<br /> A monster win for gaming.
 				</h2>
-				<p class="hiw-subtitle px-5 text-lg md:text-xl mt-4">
+				<p class="a1Section__subtitle">
 					It's here. The biggest redesign in the history of Apple GPUs.
 				</p>
 			</div>
 
-			<!-- 
-        游戏画面展示 
-        max-w-3xl: 限制最大宽度 (之前是 4xl)，防止图片撑满屏幕，
-        给左右留出更多黑色背景，更有电影感。
-      -->
-			<div class="w-full flex flex-col items-center max-w-[90vw] md:max-w-3xl">
-				<div class="relative h-full flex-center w-full">
-					<div class="overflow-hidden flex-center w-full relative z-10">
-						<img src={frameImg} alt="frame" class="bg-transparent relative z-10 w-full h-auto" />
+			<div class="a1Section__game-display">
+				<div class="a1Section__media-container">
+					<div class="a1Section__frame-container">
+						<img src={frameImg} alt="frame" class="a1Section__frame-img" />
 					</div>
-					<div class="hiw-video flex-center">
+					<div class="a1Section__video-container">
 						<video
-							class="pointer-events-none object-cover w-full h-full rounded-[30px] md:rounded-[42px]"
+							class="a1Section__game-video"
 							playsinline
 							preload="none"
 							muted
@@ -75,37 +62,28 @@
 						</video>
 					</div>
 				</div>
-				<p class="text-gray-400 font-semibold text-center mt-4 text-base md:text-lg tracking-tight">
-					Honkai: Star Rail
-				</p>
+				<p class="a1Section__game-name">Honkai: Star Rail</p>
 			</div>
 
-			<!-- 底部详情 -->
-			<div
-				class="w-full flex flex-col md:flex-row justify-between items-center md:items-start gap-12 md:gap-16 px-5 pb-10"
-			>
-				<div
-					class="flex-1 flex justify-center flex-col items-center md:items-start text-center md:text-left gap-y-6"
-				>
-					<p class="hiw-text g_fadeIn text-lg md:text-xl">
+			<div class="a1Section__bottom-details">
+				<div class="a1Section__details-text">
+					<p class="a1Section__details-paragraph g_fadeIn">
 						A17 Pro is an entirely new class of iPhone chip that delivers our {' '}
-						<span class="text-white"> best graphic performance by far </span>.
+						<span class="a1Section__highlight-text"> best graphic performance by far </span>.
 					</p>
-					<p class="hiw-text g_fadeIn text-lg md:text-xl">
+					<p class="a1Section__details-paragraph g_fadeIn">
 						Mobile {' '}
-						<span class="text-white"> games will look and feel so immersive </span>, with incredibly
-						detailed environments and characters.
+						<span class="a1Section__highlight-text"> games will look and feel so immersive </span>,
+						with incredibly detailed environments and characters.
 					</p>
 				</div>
 
-				<div class="flex-1 flex justify-center flex-col items-center text-center g_fadeIn md:pt-2">
-					<p class="hiw-text mb-2 text-lg">New</p>
-					<p class="hiw-bigtext mb-2 text-4xl md:text-5xl">Pro-class GPU</p>
-					<p class="hiw-text text-lg">with 6 cores</p>
+				<div class="a1Section__gpu-feature g_fadeIn">
+					<p class="a1Section__gpu-label">New</p>
+					<p class="a1Section__gpu-title">Pro-class GPU</p>
+					<p class="a1Section__gpu-desc">with 6 cores</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- 新增：空白占位元素 -->
-	<div class="w-full h-20 md:h-32 lg:h-40"></div>
 </section>

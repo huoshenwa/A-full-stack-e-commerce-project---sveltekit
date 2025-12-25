@@ -1,0 +1,87 @@
+/* 引入公共布局样式 */
+@reference "../../../routes/layout.css";
+
+/* 核心区块：通用内边距、锌色背景、相对定位、溢出隐藏、全屏宽度、垂直布局、居中对齐 */
+.feaSection {
+	@apply relative flex w-full flex-col items-center overflow-hidden bg-zinc common-padding;
+}
+
+/* 内容容器：限制最大屏幕宽度 */
+.feaSection__content-wrapper {
+	@apply screen-max-width;
+}
+
+/* 标题容器：响应式底部间距、全屏宽度、移动端左侧内边距 */
+.feaSection__title-container {
+	@apply mb-8 w-full pl-5 md:mb-12 md:pl-0;
+}
+
+/* 主标题：复用section-heading样式、左对齐、响应式字号（稍减小更平衡） */
+.feaSection__main-heading {
+	@apply section-heading text-left text-4xl md:text-5xl lg:text-6xl;
+}
+
+/* 核心内容区：垂直布局、居中对齐、响应式垂直间距（更紧凑） */
+.feaSection__core-content {
+	@apply flex flex-col items-center justify-center gap-y-16 md:gap-y-24;
+}
+
+/* 宣传语区域：全屏宽度、垂直布局、居中对齐、移动端内边距 */
+.feaSection__slogan-area {
+	@apply flex w-full flex-col items-center px-5 text-center md:px-0;
+}
+
+/* 宣传语文字：响应式字号、半粗体（视觉更平衡） */
+.feaSection__slogan-text {
+	@apply text-3xl font-semibold md:text-5xl lg:text-6xl;
+}
+
+/* 媒体展示区：垂直布局、居中对齐、响应式间距、全屏宽度、移动端水平内边距 */
+.feaSection__media-area {
+	@apply flex w-full flex-col items-center gap-y-10 sm:px-10 md:gap-y-16;
+}
+
+/* 视频容器：相对定位、响应式高度（降低高度提升视野）、全屏宽度、垂直居中 */
+.feaSection__video-container {
+	@apply relative flex h-[30vh] w-full items-center md:h-[40vh];
+}
+
+/* 核心视频：全屏宽高、对象覆盖居中、大圆角 */
+.feaSection__feature-video {
+	@apply h-full w-full rounded-3xl object-cover object-center;
+}
+
+/* 图片网格：响应式布局、间距、全屏宽度 */
+.feaSection__image-grid {
+	@apply flex w-full flex-col gap-6 md:flex-row md:gap-10;
+}
+
+/* 图片项：溢出隐藏、弹性占比、响应式高度、大圆角 */
+.feaSection__image-item {
+	@apply h-[30vh] flex-1 overflow-hidden rounded-3xl md:h-[40vh];
+}
+
+/* 特性图片：复用feature-video/g_grow动画样式 */
+.feaSection__feature-image {
+	@apply feature-video;
+}
+
+/* 文字描述区：全屏宽度、响应式布局、顶部对齐、居中、间距、移动端内边距、响应式底部内边距 */
+.feaSection__desc-area {
+	@apply flex w-full flex-col items-start justify-center gap-8 px-5 pb-10 md:flex-row md:gap-16 md:pb-0;
+}
+
+/* 描述列：弹性占比、居中对齐 */
+.feaSection__desc-column {
+	@apply flex flex-1 justify-center;
+}
+
+/* 描述文字：复用feature-text/g_text样式、响应式字号、半粗体、宽松行高 */
+.feaSection__desc-text {
+	@apply feature-text text-base leading-relaxed font-semibold md:text-lg;
+}
+
+/* 高亮文本：白色强调 */
+.feaSection__highlight-text {
+	@apply text-white;
+}
