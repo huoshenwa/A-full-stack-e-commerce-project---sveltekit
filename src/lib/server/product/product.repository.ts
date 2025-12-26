@@ -223,10 +223,18 @@ export class ProductRepository {
      */
     async create(data: CreateProductData & { sellerId: string }) {
         // 1. 插入数据到products表
+
+        // 核心修复：将业务层的number价格转为string，适配数据库类型
+        const insertData = {
+            ...data,
+            price: data.price.toString(), // number → string
+            compareAtPrice: data.compareAtPrice?.toString(), // 可选字段同理
+            cost: data.cost?.toString(),
+        };
         // 2. 使用returning()返回插入后的完整记录
         const [product] = await db
             .insert(products) // 执行插入操作
-            .values(data) // 插入的数据对象（包含卖家ID）
+            .values(insertData) // 插入的数据对象（包含卖家ID）
             .returning(); // 返回插入后的记录
 
         // 3. 返回新建的产品对象
@@ -244,10 +252,24 @@ export class ProductRepository {
         //    - 合并更新数据和updatedAt字段（自动更新修改时间）
         //    - 条件匹配指定ID
         //    - 返回更新后的记录
+
+        const updateData: Record<string, any> = { ...data };
+        // 若传入price，将number转为string
+        if (updateData.price !== undefined) {
+            updateData.price = updateData.price.toString();
+        }
+        // 若传入compareAtPrice，同理转换
+        if (updateData.compareAtPrice !== undefined) {
+            updateData.compareAtPrice = updateData.compareAtPrice.toString();
+        }
+        // 若传入cost，同理转换
+        if (updateData.cost !== undefined) {
+            updateData.cost = updateData.cost.toString();
+        }
         const [product] = await db
             .update(products) // 执行更新操作
             .set({
-                ...data, // 传入的更新字段
+                ...updateData, // 传入的更新字段
                 updatedAt: new Date() // 强制更新修改时间
             })
             .where(eq(products.id, id)) // 条件：产品ID匹配
@@ -366,10 +388,14 @@ export class ProductRepository {
         image?: string;
     }) {
         // 1. 插入数据到productVariants表
+        const insertData = {
+            ...data,
+            price: data.price.toString(), // number → string
+        };
         // 2. 使用returning()返回插入后的完整记录
         const [variant] = await db
             .insert(productVariants) // 执行插入操作
-            .values(data) // 插入的变体数据
+            .values(insertData) // 插入的变体数据
             .returning(); // 返回插入后的记录
 
         // 3. 返回新建的变体对象
@@ -391,10 +417,15 @@ export class ProductRepository {
         //    - 合并更新数据和updatedAt字段
         //    - 条件匹配变体ID
         //    - 返回更新后的记录
+        const updateData: Record<string, any> = { ...data };
+        // 若传入price，将number转为string
+        if (updateData.price !== undefined) {
+            updateData.price = updateData.price.toString();
+        }
         const [variant] = await db
             .update(productVariants) // 执行更新操作
             .set({
-                ...data, // 传入的更新字段
+                ...updateData, // 传入的更新字段
                 updatedAt: new Date() // 强制更新修改时间
             })
             .where(eq(productVariants.id, id)) // 条件：变体ID匹配

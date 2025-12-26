@@ -50,11 +50,11 @@ export interface CreateProductData {
     /** 简短描述（可选）- 最长500字符，用于商品列表页展示 */
     shortDescription?: string;
     /** 销售价格（必填）- 必须大于0，单位为元（保留2位小数） */
-    price: number;
+    price: number | string;
     /** 划线价（原价，可选）- 用于展示优惠力度，需大于销售价格 */
-    compareAtPrice?: number;
+    compareAtPrice?: number | string;
     /** 成本价（可选）- 仅商家可见，不返回给前端用户 */
-    cost?: number;
+    cost?: number | string;
     /** SKU编号（可选）- 商品库存单位标识符，需唯一 */
     sku?: string;
     /** 库存数量（必填）- 初始库存数量，支持后续更新 */
@@ -83,6 +83,8 @@ export interface UpdateProductData extends Partial<CreateProductData> {
     status?: 'draft' | 'active' | 'archived';
     /** 发布状态（可选）- 控制商品是否对外展示 */
     isPublished?: boolean;
+    /** 发布时间（可选）- 记录商品首次发布的时间 */
+    publishedAt?: Date;
 }
 
 /**

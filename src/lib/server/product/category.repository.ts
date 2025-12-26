@@ -230,7 +230,11 @@ export class CategoryRepository {
             FROM products 
             WHERE category_id = ${categoryId}
         `);
-
+        // Drizzle 聚合查询：统计分类下的商品数
+        // const result = await db
+        //     .select({ count: count() }) // 等价于 COUNT(*)
+        //     .from(products)
+        //     .where(eq(products.categoryId, categoryId)); // 等价于 WHERE category_id = $1
         // 2. 处理查询结果：
         //    - 提取count字段值
         //    - 转换为数字类型（无结果则返回0）

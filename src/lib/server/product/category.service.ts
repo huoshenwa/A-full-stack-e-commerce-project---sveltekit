@@ -67,7 +67,7 @@ export class CategoryService {
             }
 
             // 检查是否会形成循环
-            let currentParentId = data.parentId;
+            let currentParentId: string | null = data.parentId;
             while (currentParentId) {
                 if (currentParentId === categoryId) {
                     throw new ProductError('Circular reference detected', 'INVALID_DATA', 400);
