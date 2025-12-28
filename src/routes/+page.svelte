@@ -16,3 +16,6 @@
 	<HowItWorks></HowItWorks>
 	<Footer></Footer>
 </main>
+
+<style>
+</style>

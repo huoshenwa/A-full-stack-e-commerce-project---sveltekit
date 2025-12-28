@@ -8,7 +8,7 @@
 	BProgress.configure({ showSpinner: false });
 	let { children } = $props();
 
-	let loadingTimeout: number;
+	let loadingTimeout: any;
 
 	beforeNavigate(() => {
 		loadingTimeout = setTimeout(() => {
@@ -21,7 +21,7 @@
 	});
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
 	<title>{page.data.title ? `${page.data.title} | NoteNow` : 'NoteNow'}</title>
 	<meta
 		property="og:title"
@@ -31,6 +31,6 @@
 		<meta property="og:description" content={page.data.description} />
 		<meta name="description" content={page.data.description} />
 	{/if}
-</svelte:head>
+</svelte:head> -->
 
 {@render children()}

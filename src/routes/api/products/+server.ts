@@ -11,6 +11,7 @@ import { productService } from '$lib/server/product/product.service'; // 商品�
 import { requirePermission } from '$lib/server/auth/auth.guard'; // 权限守卫（校验用户是否有指定权限）
 import { ProductError } from '$lib/server/product/product.types'; // 商品相关自定义错误类型
 import type { RequestHandler } from './$types'; // SvelteKit 自动生成的请求处理器类型
+import { AuthError } from '$lib/server/auth/auth.types';
 
 // ====================== 公开接口：获取商品列表 ======================
 // GET 请求处理器：查询商品列表（支持多条件筛选、分页、排序），无需登录（公开接口）
@@ -25,7 +26,7 @@ export const GET: RequestHandler = async ({ url }) => {
             // 商品状态筛选：draft(草稿)/active(在售)/archived(归档)（后台管理用）
             status: url.searchParams.get('status') as any || undefined,
             // 发布状态筛选：published=true → 只查对外展示的商品（前端商品页用）
-            isPublished: url.searchParams.get('published') === 'true' ? true : undefined,
+            isPublished: url.searchParams.get('published') === 'false' ? false : true,
             // 最低价格筛选：minPrice=99 → 只查价格≥99的商品（类型转换：字符串→数字）
             minPrice: url.searchParams.get('minPrice') ? Number(url.searchParams.get('minPrice')) : undefined,
             // 最高价格筛选：maxPrice=199 → 只查价格≤199的商品（类型转换：字符串→数字）
@@ -39,8 +40,9 @@ export const GET: RequestHandler = async ({ url }) => {
             // 分页：默认第1页（page=1），前端可传 page=2 翻页（类型转换：字符串→数字）
             page: url.searchParams.get('page') ? Number(url.searchParams.get('page')) : 1,
             // 每页条数：默认20条（pageSize=20），前端可传 pageSize=10 自定义（类型转换：字符串→数字）
-            pageSize: url.searchParams.get('pageSize') ? Number(url.searchParams.get('pageSize')) : 20
+            pageSize: url.searchParams.get('pageSize') ? Number(url.searchParams.get('pageSize')) : 20,
         };
+
 
         // 步骤2：调用业务服务查询商品列表（封装筛选、分页、排序逻辑）
         const products = await productService.getProducts(filter);
@@ -60,7 +62,9 @@ export const GET: RequestHandler = async ({ url }) => {
         if (err instanceof ProductError) {
             return json({ error: err.message }, { status: err.statusCode });
         }
-
+        if (err instanceof AuthError) {
+            return json({ error: err.message }, { status: err.statusCode });
+        }
         // 场景2：未知服务器异常（如数据库查询失败、代码逻辑错误）
         console.error('Get products error:', err); // 日志记录：便于排查问题
         return json({ error: 'Internal server error' }, { status: 500 }); // 隐藏具体异常，防止信息泄露
@@ -119,7 +123,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         if (err instanceof ProductError) {
             return json({ error: err.message }, { status: err.statusCode });
         }
-
+        if (err instanceof AuthError) {
+            return json({ error: err.message }, { status: err.statusCode });
+        }
         // 场景2：未知服务器异常（如数据库插入失败、代码逻辑错误）
         console.error('Create product error:', err);
         return json({ error: 'Internal server error' }, { status: 500 });

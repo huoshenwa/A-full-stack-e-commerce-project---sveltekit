@@ -4,8 +4,11 @@ import { AuthError } from '$lib/server/auth/auth.types';
 import type { Handle } from '@sveltejs/kit';
 // 步骤1：定义全局请求处理器（Handle类型）
 export const handle: Handle = async ({ event, resolve }) => {
+    // console.log("event:\n", event);
+
     // 步骤2：从请求Cookie中读取sessionId（前端登录后存在Cookie里的会话ID）
     const sessionId = event.cookies.get('session');
+    // console.log("event-sessionId:\n", sessionId);
     // 步骤3：判断是否有sessionId（用户是否可能已登录）
     if (sessionId) {
         try {

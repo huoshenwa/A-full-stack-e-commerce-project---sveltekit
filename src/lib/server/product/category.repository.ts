@@ -238,7 +238,7 @@ export class CategoryRepository {
         // 2. 处理查询结果：
         //    - 提取count字段值
         //    - 转换为数字类型（无结果则返回0）
-        return Number(result.rows[0]?.count || 0);
+        return Number(result[0]?.count || 0);
     }
 }
 

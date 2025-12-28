@@ -223,7 +223,6 @@ export class ProductRepository {
      */
     async create(data: CreateProductData & { sellerId: string }) {
         // 1. 插入数据到products表
-
         // 核心修复：将业务层的number价格转为string，适配数据库类型
         const insertData = {
             ...data,

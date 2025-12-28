@@ -15,6 +15,13 @@
       "when": 1766389473220,
       "tag": "0001_married_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766909509412,
+      "tag": "0002_green_yellow_claw",
+      "breakpoints": true
     }
   ]
 }

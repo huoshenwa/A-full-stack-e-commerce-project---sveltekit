@@ -1,0 +1,719 @@
+openapi: 3.0.3
+info:
+  title: 全栈电商项目 API 文档
+  version: '1.0.0'
+  description: |
+    注意：
+      - 鉴权方式：仓库中使用 HTTP Cookie（名为 `session`）保存会话，本文件将其作为 cookieAuth 方案。
+servers:
+  - url: /
+    description: 相对路径（SvelteKit Server Routes）
+
+tags:
+  - name: Auth
+    description: 用户认证相关接口（注册/登录/登出/当前用户信息）
+  - name: OAuth
+    description: 第三方 OAuth 授权流程（发起授权 / 回调）
+  - name: Products
+    description: 商品相关接口（查询、创建、更新、删除、发布/下架）
+  - name: Categories
+    description: 商品分类相关接口（查询、创建）
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+      description: |
+        会话 Cookie。登录或注册成功后服务端会设置该 Cookie。
+        用于受保护接口的身份鉴权（示例：GET /api/auth/me、商品管理接口等）。
+  schemas:
+    ErrorResponse:
+      type: object
+      description: 通用错误响应
+      properties:
+        error:
+          type: string
+          description: 错误信息简短描述
+          example: 'Email and password are required'
+    ValidationError:
+      type: object
+      description: 参数校验失败响应（可选扩展）
+      properties:
+        error:
+          type: string
+          example: 'Validation failed'
+        details:
+          type: object
+          description: 字段级别的校验信息，键为字段名，值为错误提示
+          example:
+            email: '邮箱格式不正确'
+            password: '密码长度至少 8 位'
+    User:
+      type: object
+      description: 已脱敏的用户信息（返回给前端的核心字段）
+      properties:
+        id:
+          type: string
+          description: 用户唯一标识（UUID 或数据库 ID）
+          example: '5f8d0d55-0a1e-4f4b-9b1f-123456789abc'
+        email:
+          type: string
+          format: email
+          description: 用户邮箱（用于登录/联系）
+          example: 'user@example.com'
+        displayName:
+          type: string
+          description: 显示名称（昵称）
+          example: '张三'
+        avatarUrl:
+          type: string
+          format: uri
+          description: 头像地址（可选）
+          example: 'https://cdn.example.com/avatars/123.png'
+        roles:
+          type: array
+          items:
+            type: string
+          description: 角色列表（如 user, admin）
+          example: ['user']
+        permissions:
+          type: array
+          items:
+            type: string
+          description: 细粒度权限（如 product:write, product:delete）
+          example: ['product:write', 'product:delete']
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 操作是否成功
+          example: true
+        user:
+          $ref: '#/components/schemas/User'
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: 登录邮箱
+          example: 'user@example.com'
+        password:
+          type: string
+          description: 密码（明文提交，服务端负责哈希）
+          example: 'password123'
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: 注册邮箱
+        password:
+          type: string
+          description: 密码（最少 8 位）
+        displayName:
+          type: string
+          description: 显示名称（昵称）
+    SessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        sessionId:
+          type: string
+          description: 可选的会话 ID（实际流程通常通过 Cookie 设置）
+    Product:
+      type: object
+      description: 商品详情
+      properties:
+        id:
+          type: string
+          description: 商品 ID
+          example: 'prod_01HABC...'
+        title:
+          type: string
+          description: 商品标题
+          example: '休闲卫衣'
+        description:
+          type: string
+          description: 详细描述（HTML 或 Markdown）
+        price:
+          type: number
+          format: float
+          description: 价格（以分/元取决于实现，此处为以单一货币单位）
+          example: 199.0
+        currency:
+          type: string
+          description: 货币代码（例如 CNY、USD）
+          example: 'CNY'
+        categoryId:
+          type: string
+          description: 所属分类 ID
+        isPublished:
+          type: boolean
+          description: 是否上架对外展示
+          example: true
+        status:
+          type: string
+          description: 商品状态（draft | active | archived）
+          example: 'active'
+        stock:
+          type: integer
+          description: 库存数量
+          example: 100
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: 图片 URL 列表
+        createdAt:
+          type: string
+          format: date-time
+          description: 创建时间
+        updatedAt:
+          type: string
+          format: date-time
+          description: 最后更新时间
+    ProductCreate:
+      type: object
+      description: 创建商品请求体（部分必填字段依据业务）
+      required:
+        - title
+        - price
+      properties:
+        title:
+          type: string
+          description: 商品标题
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          description: 货币代码
+          example: 'CNY'
+        categoryId:
+          type: string
+        stock:
+          type: integer
+          default: 0
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+    ProductUpdate:
+      type: object
+      description: 更新商品（PATCH，支持部分字段）
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        images:
+          type: array
+          items:
+            type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 分类 ID
+        name:
+          type: string
+          description: 分类名称
+        parentId:
+          type: string
+          description: 父分类 ID（顶级分类为空）
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PagedProducts:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+
+  responses:
+    Unauthorized:
+      description: 未认证 / 会话无效
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            unauthorized:
+              value:
+                error: 'Unauthorized'
+    Forbidden:
+      description: 权限不足
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            forbidden:
+              value:
+                error: 'Forbidden'
+    NotFound:
+      description: 资源未找到
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notfound:
+              value:
+                error: 'Not found'
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: 用户注册并创建会话（同时登录）
+      description: |
+        创建新用户，密码由服务端进行哈希存储。注册成功后会返回成功状态并通过 Set-Cookie 设置 `session`。
+        注意：密码长度至少为 8 位（服务器会做二次校验）。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              sample:
+                value:
+                  email: 'newuser@example.com'
+                  password: 'strongpassword'
+                  displayName: '李四'
+      responses:
+        '200':
+          description: 注册成功并已登录（Cookie 已设置）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: 参数错误（例如密码过短、邮箱已存在）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: 用户登录（设置会话 Cookie）
+      description: |
+        使用邮箱与密码登录。登录成功后服务端返回并通过 Set-Cookie 设置 `session`。
+        请求中应避免将会话 token 放入 URL 或前端可读的 localStorage（本项目使用 httpOnly cookie）。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              sample:
+                value:
+                  email: 'user@example.com'
+                  password: 'password123'
+      responses:
+        '200':
+          description: 登录成功（Cookie 设置）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: 登录失败（凭证错误 / 参数缺失）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: 退出登录（服务端使会话失效并删除 Cookie）
+      description: |
+        读取 Cookie 中的 session id，调用服务端会话失效逻辑（invalidateSession），并删除客户端 Cookie。
+        无论是否存在 session，都返回 success:true（幂等）。
+      responses:
+        '200':
+          description: 登出成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+  /api/auth/me:
+    get:
+      tags:
+        - Auth
+      summary: 获取当前登录用户信息（脱敏）
+      description: |
+        仅在已登录的情况下返回用户基本信息（不包含密码/敏感字段），用于前端展示用户资料与权限判断。
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 当前用户信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/auth/oauth/{provider}:
+    get:
+      tags:
+        - OAuth
+      summary: 发起第三方 OAuth 授权（重定向到授权页面）
+      description: |
+        根据 provider（例如 github、google）生成授权 URL 并重定向。
+        通常会生成一个 state 并将其与临时信息做关联以防止 CSRF。
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          description: OAuth 提供者标识（例如 github、google）
+          schema:
+            type: string
+      responses:
+        '302':
+          description: 重定向到第三方授权地址
+        '400':
+          description: 发起授权失败
+  /api/auth/oauth/{provider}/callback:
+    get:
+      tags:
+        - OAuth
+      summary: OAuth 回调处理（使用 code 换取用户信息并创建会话）
+      description: |
+        第三方回调后使用 code 进行 token 交换并在本系统创建/获取用户与会话，最后设置 session Cookie 并重定向到应用页面。
+        注意：生产环境应校验 state。
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          description: OAuth 提供者标识
+          schema:
+            type: string
+        - name: code
+          in: query
+          required: false
+          description: OAuth 返回的 code（由第三方携带）
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          description: OAuth state（用于 CSRF 校验）
+          schema:
+            type: string
+      responses:
+        '302':
+          description: 成功或失败后重定向到前端页面（例如 /dashboard 或 /login?error=...）
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: 查询商品列表（公开）
+      description: |
+        支持多条件筛选、分页与排序。默认返回分页结构。
+      parameters:
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+          description: 根据分类 ID 过滤商品
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: 商品状态过滤（draft|active|archived）
+        - name: published
+          in: query
+          schema:
+            type: boolean
+          description: 仅返回已发布商品（published=true）
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+          description: 价格下限
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+          description: 价格上限
+        - name: inStock
+          in: query
+          schema:
+            type: boolean
+          description: 是否有库存（true 表示只返回库存>0 的商品）
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: 关键词模糊搜索（商品名/描述）
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: 页码（从 1 开始）
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+          description: 每页数量
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: 排序字段（如 price:asc、createdAt:desc）
+      responses:
+        '200':
+          description: 分页商品列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedProducts'
+    post:
+      tags:
+        - Products
+      summary: 创建商品（需要 product.write 权限）
+      description: |
+        仅登录且具备相应权限的商家可创建商品。请求体为 ProductCreate 模式，返回创建后的商品详情。
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+      responses:
+        '200':
+          description: 创建成功，返回商品详情
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 商品 ID
+        schema:
+          type: string
+    get:
+      tags:
+        - Products
+      summary: 获取商品详情（公开）
+      responses:
+        '200':
+          description: 返回商品详情
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - Products
+      summary: 更新商品（需要 product.write 权限，PATCH 支持部分字段）
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+            description: 仅需提交要更新的字段
+      responses:
+        '200':
+          description: 更新成功，返回更新后的商品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - Products
+      summary: 删除商品（需要 product.delete 权限）
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 删除成功（或标记删除）
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/products/{id}/publish:
+    post:
+      tags:
+        - Products
+      summary: 发布商品（上架，需为商品所有者且具备 product.write 权限）
+      description: |
+        将草稿或下架商品改为对外展示的已发布状态。后端会校验商品归属与权限。
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 商品 ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 发布成功并返回商品信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/products/{id}/unpublish:
+    post:
+      tags:
+        - Products
+      summary: 下架商品（需商品所有者）
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 下架成功并返回商品信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/categories:
+    get:
+      tags:
+        - Categories
+      summary: 查询分类（扁平或树形）
+      description: |
+        可通过 query 参数 tree=true 请求树形结构（含 children），否则返回扁平数组。
+      parameters:
+        - name: tree
+          in: query
+          schema:
+            type: boolean
+          description: 是否以树形结构返回（true 返回带 children 的嵌套结构）
+      responses:
+        '200':
+          description: 分类列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+    post:
+      tags:
+        - Categories
+      summary: 创建分类（需 product.manage 权限）
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  description: 分类名称
+                parentId:
+                  type: string
+                  description: 父分类 ID，可为空表示顶级
+      responses:
+        '200':
+          description: 创建成功，返回分类信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+security:
+  - {} # 默认不强制鉴权，按每个接口单独声明 security（公开接口无需鉴权）
+
+externalDocs:
+  description: 仓库代码（用于核对实现）
+  url: https://github.com/huoshenwa/A-full-stack-e-commerce-project---sveltekit

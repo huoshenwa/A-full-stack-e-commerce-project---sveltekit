@@ -84,6 +84,7 @@ export class CategoryService {
      * 删除分类
      */
     async deleteCategory(categoryId: string) {
+
         const category = await categoryRepository.findById(categoryId);
 
         if (!category) {
@@ -95,7 +96,6 @@ export class CategoryService {
         if (children.length > 0) {
             throw new ProductError('Cannot delete category with children', 'INVALID_DATA', 400);
         }
-
         // 检查是否有商品
         const productCount = await categoryRepository.getProductCount(categoryId);
         if (productCount > 0) {

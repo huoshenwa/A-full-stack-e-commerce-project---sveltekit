@@ -33,6 +33,7 @@ export class ProductService {
             throw ProductError.SlugExists;
         }
 
+
         // 3. 调用Repository创建商品：将数字价格转为字符串（适配数据库decimal类型）
         const product = await productRepository.create({
             ...data,
@@ -198,7 +199,24 @@ export class ProductService {
             variants
         };
     }
+    async getProductsBySlug(slug: string) {
+        const product = await productRepository.findBySlug(slug);
+        if (!product) {
+            throw ProductError.NotFound;
+        }
+        // 2. 增加商品浏览次数（如商品详情页访问时调用）
 
+        const [viewCountResult, variants] = await Promise.all([
+            productRepository.incrementViewCount(product.id), // 任务1：增加浏览量
+            productRepository.findVariants(product.id)        // 任务2：查询商品变体
+        ]);
+
+        // 4. 返回完整详情（基础信息+变体）
+        return {
+            ...product,
+            variants
+        };
+    }
     /**
      * 获取商品列表（支持筛选）
      * @param filter 筛选条件（价格区间、分类、状态、关键词等）

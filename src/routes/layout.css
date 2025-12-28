@@ -10,11 +10,11 @@
 
 body {
 	color: white;
+	background: #000;
+	border-color: #3b3b3b;
 	width: 100dvw;
 	overflow-x: hidden;
 	height: 100%;
-	background: #000;
-	border-color: #3b3b3b;
 }
 
 canvas {

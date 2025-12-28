@@ -9,6 +9,9 @@ import * as oauthSchema from './schema/oauth';
 import * as promotion from './schema/promotion';
 import * as product from './schema/product';
 import * as review from './schema/review';
+import * as cart from './schema/cart';
+import * as address from './schema/address';
+import * as order from './schema/order';
 
 import 'dotenv/config';
 export const DATABASE_URL = process.env.DATABASE_URL!;
@@ -26,7 +29,10 @@ export const db = drizzle(client, {
         ...oauthSchema,
         ...promotion,
         ...product,
-        ...review
+        ...review,
+        ...cart,
+        ...address,
+        ...order,
     }
 });
 
@@ -37,3 +43,6 @@ export * from './schema/oauth';
 export * from './schema/promotion';
 export * from './schema/product';
 export * from './schema/review';
+export * from './schema/cart';
+export * from './schema/address';
+export * from './schema/order';
