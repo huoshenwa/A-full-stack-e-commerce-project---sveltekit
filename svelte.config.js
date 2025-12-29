@@ -17,6 +17,12 @@ const config = {
 			$lib: "src/lib",
 			$assets: "src/lib/assets",
 			$constants: "src/lib/constants"
+		},
+		vite: {
+			ssr: {
+				// 告诉 Vite 在 SSR 阶段不要去解析 gsap
+				noExternal: ['gsap']
+			}
 		}
 	}
 };
