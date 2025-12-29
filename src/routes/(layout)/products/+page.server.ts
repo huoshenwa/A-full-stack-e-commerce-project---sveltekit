@@ -1,6 +1,7 @@
 // src/routes/+page.server.ts
 import type { PageServerLoad } from './$types';
-
+export const prerender = false;
+export const ssr = true;
 export const load: PageServerLoad = async ({ fetch, url }) => {
     // 获取查询参数
     const search = url.searchParams.get('search') || '';
