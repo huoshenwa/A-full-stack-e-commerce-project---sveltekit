@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
-        throw redirect(302, '/index');
+        throw redirect(302, '/products');
     }
 
     return {};
@@ -36,6 +36,6 @@ export const actions: Actions = {
             return fail(response.status, { error: error.error || '注册失败' });
         }
 
-        throw redirect(302, '/index');
+        throw redirect(302, '/products');
     }
 };

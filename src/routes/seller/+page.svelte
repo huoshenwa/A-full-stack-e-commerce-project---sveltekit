@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-
 	let { data }: { data: PageData } = $props();
-
 	let products = $derived(data.products);
 	let pagination = $derived(data.pagination);
 	let filters = $derived(data.filters);
@@ -17,7 +15,6 @@
 		</div>
 		<a href="/products/create" class="btn-primary">+ 创建新商品</a>
 	</header>
-
 	<div class="toolbar">
 		<form method="GET" class="filter-form">
 			<div class="select-wrapper">
@@ -31,7 +28,6 @@
 			<button type="submit" class="btn-secondary">筛选</button>
 		</form>
 	</div>
-
 	<div class="data-panel">
 		<table class="modern-table">
 			<thead>
@@ -60,7 +56,7 @@
 							</span>
 						</td>
 						<td>
-							<span class="status-dot" class:active={product.isPublished}>
+							<span class="status-badge" class:active={product.isPublished}>
 								{product.isPublished ? '销售中' : '仓库中'}
 							</span>
 						</td>
@@ -68,7 +64,6 @@
 						<td class="text-right">
 							<div class="actions-group">
 								<a href="/seller/products/{product.id}/edit" class="action-link">编辑</a>
-
 								{#if product.isPublished}
 									<form method="POST" action="/api/products/{product.id}/unpublish" use:enhance>
 										<button type="submit" class="action-btn danger">下架</button>
@@ -85,7 +80,6 @@
 			</tbody>
 		</table>
 	</div>
-
 	<nav class="pagination">
 		{#if pagination.page > 1}
 			<a href="?page={pagination.page - 1}&status={filters.status}" class="page-btn">上一页</a>
@@ -96,206 +90,133 @@
 </div>
 
 <style>
+	@reference '../layout.css';
+	/* 
+		 * 布局容器
+		 */
 	.seller-container {
-		max-width: 1100px;
-		margin: 40px auto;
-		padding: 0 20px;
-		color: #111;
+		@apply mx-auto max-w-[1100px] p-4 text-slate-200 md:p-6 lg:p-8;
 	}
-
+	/* 
+		 * 头部区域 
+		 */
 	.page-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-end;
-		margin-bottom: 32px;
+		@apply mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end;
 	}
-
-	.page-header h1 {
-		font-size: 28px;
-		font-weight: 600;
-		margin: 0 0 4px 0;
+	.header-main h1 {
+		@apply text-2xl font-bold tracking-tight text-slate-100 md:text-3xl;
 	}
-
 	.subtitle {
-		color: #666;
-		font-size: 14px;
-		margin: 0;
+		@apply mt-1 text-sm text-slate-400;
 	}
-
-	/* 工具栏 */
+	/* 
+		 * 按钮组件
+		 */
+	.btn-primary {
+		@apply inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-500 hover:shadow-blue-500/30 active:scale-95;
+	}
+	.btn-secondary {
+		@apply rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white focus:ring-2 focus:ring-slate-500 focus:outline-none;
+	}
+	/* 
+		 * 工具栏与筛选
+		 */
 	.toolbar {
-		margin-bottom: 20px;
+		@apply mb-6 flex items-center gap-4;
 	}
-
 	.filter-form {
-		display: flex;
-		gap: 12px;
+		@apply flex w-full max-w-xs gap-3;
 	}
-
+	.select-wrapper {
+		@apply relative w-full;
+	}
 	select {
-		padding: 8px 12px;
-		border: 1px solid #ddd;
-		border-radius: 6px;
-		background: #fff;
-		font-size: 14px;
-		outline: none;
+		@apply w-full appearance-none rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 pr-10 text-sm text-slate-200 shadow-inner focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none;
 	}
-
-	/* 数据表格 */
+	/* 
+		 * 数据面板与表格
+		 */
 	.data-panel {
-		background: #fff;
-		border: 1px solid #eee;
-		border-radius: 12px;
-		overflow: hidden;
+		@apply overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 shadow-2xl backdrop-blur-sm;
 	}
-
 	.modern-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 14px;
+		@apply w-full text-left text-sm;
 	}
-
 	.modern-table th {
-		text-align: left;
-		padding: 16px;
-		background: #fafafa;
-		color: #888;
-		font-weight: 500;
-		border-bottom: 1px solid #eee;
+		@apply px-6 py-4 text-xs font-semibold tracking-wider text-slate-500 uppercase;
 	}
-
 	.modern-table td {
-		padding: 16px;
-		border-bottom: 1px solid #f5f5f5;
+		@apply border-t border-slate-800/50 px-6 py-4 align-middle;
 	}
-
+	.modern-table tr:hover td {
+		@apply bg-slate-800/30;
+	}
+	/* 
+		 * 表格内容元素
+		 */
 	.product-info {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
+		@apply flex flex-col gap-1;
 	}
-
 	.product-name {
-		color: #111;
-		text-decoration: none;
-		font-weight: 500;
+		@apply font-medium text-slate-100 transition-colors hover:text-blue-400;
 	}
-
-	.product-name:hover {
-		color: #0070f3;
-	}
-
 	.product-id {
-		font-size: 12px;
-		color: #aaa;
-		font-family: monospace;
+		@apply font-mono text-xs text-slate-600;
 	}
-
-	/* 状态点样式 */
-	.status-dot {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		color: #666;
+	.stock-text {
+		@apply text-slate-300;
 	}
-
-	.status-dot::before {
+	.stock-text.low-stock {
+		@apply font-semibold text-red-400;
+	}
+	/* 状态徽章 */
+	.status-badge {
+		@apply inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-400 transition-colors;
+	}
+	.status-badge.active {
+		@apply border-emerald-500/30 bg-emerald-500/10 text-emerald-400;
+	}
+	.status-badge::before {
 		content: '';
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		background: #ccc;
+		@apply h-1.5 w-1.5 rounded-full bg-current;
 	}
-
-	.status-dot.active {
-		color: #2e7d32;
-	}
-
-	.status-dot.active::before {
-		background: #4caf50;
-	}
-
-	.low-stock {
-		color: #d32f2f;
-		font-weight: 600;
-	}
-
-	/* 操作按钮 */
+	/* 
+		 * 操作区
+		 */
 	.actions-group {
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		gap: 16px;
+		@apply flex justify-end gap-4;
 	}
-
 	.action-link {
-		color: #666;
-		text-decoration: none;
+		@apply text-sm font-medium text-slate-400 transition-colors hover:text-white;
 	}
-
-	.action-link:hover {
-		color: #000;
-	}
-
 	.action-btn {
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
-		font-size: 14px;
-		font-weight: 500;
+		@apply cursor-pointer bg-transparent p-0 text-sm font-medium transition-colors outline-none;
 	}
-
 	.action-btn.success {
-		color: #0070f3;
+		@apply text-emerald-400 hover:text-emerald-300;
 	}
 	.action-btn.danger {
-		color: #ff4d4f;
+		@apply text-red-400 hover:text-red-300;
 	}
-
-	/* 通用按钮样式 */
-	.btn-primary {
-		background: #111;
-		color: #fff;
-		padding: 10px 20px;
-		border-radius: 6px;
-		text-decoration: none;
-		font-weight: 500;
-		font-size: 14px;
-	}
-
-	.btn-secondary {
-		background: #fff;
-		border: 1px solid #ddd;
-		padding: 8px 16px;
-		border-radius: 6px;
-		cursor: pointer;
-	}
-
-	/* 分页 */
+	/* 
+		 * 分页
+		 */
 	.pagination {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 32px;
-		margin-top: 32px;
+		@apply mt-8 flex items-center justify-center gap-8;
 	}
-
 	.page-btn {
-		color: #666;
-		text-decoration: none;
-		font-size: 14px;
+		@apply rounded-lg border border-slate-800 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-50;
 	}
-
 	.page-indicator {
-		font-size: 14px;
-		color: #aaa;
+		@apply text-sm font-medium text-slate-500;
 	}
-
+	/* 
+		 * 辅助类
+		 */
 	.text-right {
-		text-align: right;
+		@apply text-right;
 	}
 	.font-medium {
-		font-weight: 500;
+		@apply font-medium;
 	}
 </style>

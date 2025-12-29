@@ -159,7 +159,7 @@
 </footer>
 
 <style>
-	@import 'tailwindcss';
+	@reference '../../layout.css';
 	/* Hero Section */
 	.hero {
 		@apply py-24 text-center;

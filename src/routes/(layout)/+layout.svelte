@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ShoppingCart, FileText, MapPin, X, Menu } from '@lucide/svelte';
 	import type { LayoutData } from './$types';
 	let { data, children }: { data: LayoutData; children: any } = $props();
 	let user = $derived(data.user);
@@ -14,7 +15,7 @@
 <nav class="nav-wrapper">
 	<div class="nav-content">
 		<div class="brand">
-			<a href="/index" class="logo">ELECTRO<span class="dot">.</span></a>
+			<a href="/products" class="logo">ELECTRO<span class="dot">.</span></a>
 		</div>
 		<!-- 桌面端导航链接 -->
 		<div class="links desktop-only">
@@ -26,6 +27,7 @@
 				<a href="/admin/products" class="nav-link">管理中心</a>
 			{/if}
 		</div>
+		<!-- 右侧操作区 -->
 		<div class="auth desktop-only">
 			{#if user}
 				<div class="user-menu-wrapper">
@@ -36,44 +38,16 @@
 						<button type="submit" class="btn-text">登出</button>
 					</form>
 				</div>
-				<!-- 新增：购物车与订单 -->
+				<!-- 购物车与订单图标 -->
 				<div class="action-icons">
 					<a href="/cart" class="icon-link" aria-label="购物车">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path
-								d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-							/></svg
-						>
+						<ShoppingCart size={20} />
 					</a>
-					<a href="/order" class="icon-link" aria-label="我的订单">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline
-								points="14 2 14 8 20 8"
-							/><line x1="16" y1="13" x2="8" y2="13" /><line
-								x1="16"
-								y1="17"
-								x2="8"
-								y2="17"
-							/><polyline points="10 9 9 9 8 9" /></svg
-						>
+					<a href="/orders" class="icon-link" aria-label="我的订单">
+						<FileText size={20} />
+					</a>
+					<a href="/profile/addresses" class="icon-link" aria-label="我的地址">
+						<MapPin size={20} />
 					</a>
 				</div>
 			{:else}
@@ -81,43 +55,16 @@
 				<a href="/auth/register" class="btn-primary">开启探索</a>
 			{/if}
 		</div>
-		<!-- 移动端汉堡菜单按钮 -->
+		<!-- 移动端菜单按钮 -->
 		<button
 			class="mobile-menu-btn mobile-only"
 			onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
 			aria-label="菜单"
 		>
 			{#if isMobileMenuOpen}
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg
-				>
+				<X size={24} />
 			{:else}
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line
-						x1="3"
-						y1="18"
-						x2="21"
-						y2="18"
-					/></svg
-				>
+				<Menu size={24} />
 			{/if}
 		</button>
 	</div>
@@ -136,9 +83,10 @@
 					<hr class="mobile-divider" />
 					<a href="/profile" class="mobile-link">个人中心</a>
 					<a href="/cart" class="mobile-link">购物车</a>
-					<a href="/order" class="mobile-link">我的订单</a>
+					<a href="/orders" class="mobile-link">我的订单</a>
+					<a href="/profile/addresses" class="mobile-link">我的地址</a>
 					<form method="POST" action="/auth/logout" class="mobile-logout-form">
-						<button type="submit" class="mobile-link w-full text-left text-red-400">登出</button>
+						<button type="submit" class="mobile-link w-full text-left text-red-400"> 登出 </button>
 					</form>
 				{:else}
 					<hr class="mobile-divider" />
@@ -153,9 +101,9 @@
 	{@render children()}
 </main>
 
-<style>
+<style type="text/tailwindcss">
 	@reference '../layout.css';
-	/* 导航栏容器 - 极简磨砂黑 */
+	/* 导航栏容器 */
 	.nav-wrapper {
 		@apply sticky top-0 z-50 flex h-[70px] items-center border-b border-neutral-800 bg-black/60 backdrop-blur-xl;
 	}
@@ -193,12 +141,25 @@
 	.btn-primary {
 		@apply rounded-md bg-white px-5 py-2.5 text-sm font-bold text-black no-underline transition-all hover:bg-neutral-200 active:scale-95;
 	}
-	/* 新增图标链接 */
+	/* 图标区域 */
 	.action-icons {
 		@apply flex items-center gap-4 border-l border-neutral-800 pl-6;
 	}
+	/* 图标链接样式 - 修复了 group 报错，使用原生伪类 */
 	.icon-link {
-		@apply flex items-center text-neutral-400 transition-colors hover:text-white;
+		@apply relative text-slate-400 transition-colors duration-200;
+	}
+	.icon-link:hover {
+		@apply text-cyan-400;
+	}
+	/* 下划线动画效果 */
+	.icon-link::after {
+		content: '';
+		@apply absolute bottom-0 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-cyan-500 transition-all duration-300;
+	}
+	.icon-link:hover::after {
+		width: 100%;
+		bottom: -2px;
 	}
 	/* 内容容器 */
 	.container {
