@@ -1,6 +1,6 @@
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 // Register the ScrollTrigger plugin
 if (typeof window !== 'undefined') {
@@ -20,11 +20,11 @@ export const animateWithGsap = (target: string | Element | Element[], animationP
 };
 
 export const animateWithGsapTimeline = (
-  timeline: gsap.core.Timeline, 
-  rotationRef: { current: { rotation: { y: number } } }, 
-  rotationState: number, 
-  firstTarget: string | Element, 
-  secondTarget: string | Element, 
+  timeline: gsap.core.Timeline,
+  rotationRef: { current: { rotation: { y: number } } },
+  rotationState: number,
+  firstTarget: string | Element,
+  secondTarget: string | Element,
   animationProps: gsap.TweenVars
 ) => {
   timeline.to(rotationRef.current.rotation, {

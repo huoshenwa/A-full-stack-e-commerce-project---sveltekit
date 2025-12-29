@@ -1,6 +1,4 @@
 <script lang="ts">
-	export const ssr = false;
-	export const csr = true;
 	import { Hero, Navbar, Highlights, Model, Features, HowItWorks, Footer } from '$components';
 	import { gsap } from 'gsap';
 	import { onMount } from 'svelte';

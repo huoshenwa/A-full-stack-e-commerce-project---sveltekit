@@ -6,7 +6,7 @@
 	import smallHeroSrc from '../../assets/videos/smallHero.mp4';
 	import { browser } from '$app/environment';
 	// 判断当前是否 >= md
-	let isMdUp: boolean | null = $state(null);
+	let isMdUp: boolean = $state(true);
 	//根据屏幕大小的断点派生videoSrc
 	let videoSrc = $derived(isMdUp ? heroSrc : smallHeroSrc);
 	$effect(() => {
