@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -17,12 +17,6 @@ const config = {
 			$lib: "src/lib",
 			$assets: "src/lib/assets",
 			$constants: "src/lib/constants"
-		},
-		vite: {
-			ssr: {
-				// 告诉 Vite 在 SSR 阶段不要去解析 gsap
-				noExternal: ['gsap']
-			}
 		}
 	}
 };
